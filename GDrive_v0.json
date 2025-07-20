@@ -1,0 +1,120 @@
+{
+  "name": "Google Drive Folder Listing",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d5a48c0e-ca6d-4a93-9a1e-8f5c7b2a9d3e",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "folderId": {
+          "__rl": true,
+          "value": "your-folder-id-here",
+          "mode": "id"
+        },
+        "options": {
+          "fields": [
+            "id",
+            "name",
+            "mimeType",
+            "parents"
+          ],
+          "queryFilters": "mimeType='application/vnd.google-apps.folder'"
+        }
+      },
+      "id": "a7b2c5d8-9e1f-4a2b-8c3d-5e6f7a8b9c0d",
+      "name": "Google Drive - List Folders",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "your-google-drive-credential-id",
+          "name": "Google Drive Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract folder names from the Google Drive response\nconst folders = [];\n\n// Process each item returned from Google Drive\nfor (const item of $input.all()) {\n  if (item.json.mimeType === 'application/vnd.google-apps.folder') {\n    folders.push({\n      name: item.json.name,\n      id: item.json.id,\n      parents: item.json.parents\n    });\n  }\n}\n\n// Return the list of folder names\nreturn {\n  json: {\n    totalFolders: folders.length,\n    folderNames: folders.map(folder => folder.name),\n    folderDetails: folders\n  }\n};"
+      },
+      "id": "b8c3d6e9-1f2a-5b3c-9d4e-7f8a9b0c1d2e",
+      "name": "Process Folder List",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "=## Folders Found in Google Drive\n\n**Total Folders:** {{ $json.totalFolders }}\n\n**Folder Names:**\n{{ $json.folderNames.join('\\n- ') }}\n\n**Detailed Information:**\n{{ JSON.stringify($json.folderDetails, null, 2) }}",
+        "options": {}
+      },
+      "id": "c9d4e7f0-2a3b-6c4d-0e5f-8a9b0c1d2e3f",
+      "name": "Display Results",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - List Folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive - List Folders": {
+      "main": [
+        [
+          {
+            "node": "Process Folder List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Folder List": {
+      "main": [
+        [
+          {
+            "node": "Display Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-20T00:00:00.000Z",
+  "versionId": "1"
+}
