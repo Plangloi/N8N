@@ -17,7 +17,7 @@
         "operation": "list",
         "folderId": {
           "__rl": true,
-          "value": "your-folder-id-here",
+          "value": "1w0cFhHN4-iSLFrBVfUPrc0qlvFAl5faf",
           "mode": "id"
         },
         "options": {
@@ -51,70 +51,4 @@
       },
       "id": "b8c3d6e9-1f2a-5b3c-9d4e-7f8a9b0c1d2e",
       "name": "Process Folder List",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        680,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "content": "=## Folders Found in Google Drive\n\n**Total Folders:** {{ $json.totalFolders }}\n\n**Folder Names:**\n{{ $json.folderNames.join('\\n- ') }}\n\n**Detailed Information:**\n{{ JSON.stringify($json.folderDetails, null, 2) }}",
-        "options": {}
-      },
-      "id": "c9d4e7f0-2a3b-6c4d-0e5f-8a9b0c1d2e3f",
-      "name": "Display Results",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        900,
-        300
-      ]
-    }
-  ],
-  "connections": {
-    "When clicking 'Test workflow'": {
-      "main": [
-        [
-          {
-            "node": "Google Drive - List Folders",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Drive - List Folders": {
-      "main": [
-        [
-          {
-            "node": "Process Folder List",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Process Folder List": {
-      "main": [
-        [
-          {
-            "node": "Display Results",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  },
-  "pinData": {},
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-01-20T00:00:00.000Z",
-  "versionId": "1"
-}
+      "type": "n8n-no
